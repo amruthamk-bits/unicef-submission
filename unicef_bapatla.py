@@ -142,61 +142,33 @@ RF_Random_Search_Df = pd.DataFrame.from_dict(RF_RS_Model.cv_results_)
 
 parameters= RF_RS_Model.best_params_
 
-# Logistic Regression Model using only Important Variables
+#Parameters will be used for the next phase
 
-from statsmodels.api import Logit
+# Naive Bayes Model using only Important Variables
+
 Dataset3= Dataset.drop(columns= ["Gender","Medium","Comfortable with SMARTPHONE",
                                  "Distance from Home to School",
                                  "Child Belongs to(Rural/Urban/ Tribal) Area*"])
 
 # spilting dataset into train and test
 X_train, X_test, y_train, y_test = train_test_split(Dataset3, y, test_size = 0.25, random_state = 0)
+
+#Building Naive Bayes Model
   
-Log_M1 = Logit(y_train, X_train) # (Dep_Var, Indep_Vars) # This is model definition
-Log_M1_Model = Log_M1.fit() # This is model building
-Log_M1_Model.summary() # This is model output/summary
+from sklearn.naive_bayes import GaussianNB
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
 
-X_test['Test_Prob'] = Log_M1_Model.predict(X_test)
+# predict
+y_pred = classifier.predict(X_test)
 
-# Classify 0 or 1 based on 0.5 cutoff
-import numpy as np
-X_test['Test_Class'] = np.where(X_test['Test_Prob'] >= 0.5, 1, 0)
+#Confusion matrix
+Confusion_Mat2 = confusion_matrix(y_test, y_pred)
 
-Confusion_Mat2 = confusion_matrix(y_test, X_test.Test_Class)
+#Accuracy
+Accuracy= ((Confusion_Mat2[0,0] + Confusion_Mat2[1,1])/y_test.shape[0])*100
 
-from sklearn.metrics import roc_curve, auc
-
-# Predict on train data
-X_train['Train_Prob'] = Log_M1_Model.predict(X_train)
-#Train['Train_Prob'] = M9_Model.predict(Train[Columns_To_Use])
-
-
-# Calculate FPR, TPR and Cutoff Thresholds
-fpr, tpr, thresholds = roc_curve(y_train, X_train['Train_Prob'])
-
-# Plot ROC Curve
-ROC_Df = pd.DataFrame()
-ROC_Df['FPR'] = fpr 
-ROC_Df['TPR'] = tpr
-ROC_Df['Cutoff'] = thresholds
-
-# Plot ROC Curve
-import matplotlib.pyplot as plt
-plt.plot(ROC_Df.FPR, ROC_Df.TPR) # (x,y)
-
-
-
-# Area under curve (AUC)
-auc(fpr, tpr)
-
-
-
-
-
-
-
-
-
-
-
+#Report
+Report = classification_report(y_test, y_pred)
+print(Report)
 
