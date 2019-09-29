@@ -15,6 +15,6 @@ We will be considering a number of scenarios where machine learning can be imple
 
 Summary of the ML model represented: We have undertaken field visits to the above mentioned school and conducted an extensive survey of the students. We have tried to capture the interests of students to continue to college (after 10th grade) and career goals.The copy includes Random Forest (For prediction and feature selection) & Naive Bayes (for prediction using only selected features). Visualisation of the results has not been at this point due to the large number of features. Also, the dummy/interactive variables have been created in another code and it is not included to avoid confusion.This predictive analysis will aid the stakeholders in future skill development and motivation of students towards progression of education.
 
-We have planned many further innovations/programmes and have a passionate team to ensure implementation on the ground.
+We have planned many further innovations/programmes and have a passionate team to ensure implementation on ground zero.
 
 Thank you.
